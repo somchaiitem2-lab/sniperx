@@ -1,69 +1,66 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>PG SLOT SNIPER</title>
+    <title>NX RNG ENGINE X</title>
     <link rel="stylesheet" href="index.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
-    <script>
-        // EMERGENCY CACHE CLEAR
-        console.log("🧹 PURGING CACHE...");
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
-        }
-        localStorage.clear();
-        sessionStorage.clear();
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Prompt:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
-
 <body>
-    <div id="v8-status"
-        style="position:fixed;top:0;left:0;width:100%;background:#00ffa3;color:black;text-align:center;font-size:10px;font-weight:bold;z-index:999999;padding:2px;display:block;">
-        [ MATHEMATICAL RNG ENGINE V18.0 - VARIANCE ANALYSIS MODE ]</div>
+    <div class="background-matrix"></div>
+    <div class="app-container">
+        
+        <header class="top-nav">
+            <div class="logo">
+                <i class="fa-solid fa-microchip logo-icon"></i>
+                <span class="logo-text">NX-ENGINE <span class="version">PRO</span></span>
+            </div>
+            <div class="server-status">
+                <span class="pulse-dot"></span> <span class="status-msg">SERVER: SECURE</span>
+            </div>
+        </header>
 
-    <div class="bg-glow"></div>
-    <div class="container" style="margin-top:40px;">
-        <h1>PG RNG SIMULATOR</h1>
-        <p class="description">วิเคราะห์หลักคณิตศาสตร์ RNG หยอดระบบกราฟ Mean Reversion (V18.0 Pure Math)</p>
+        <main class="main-content">
+            <div class="hero-section">
+                <h1 class="main-title">PRNG TIMING <span class="highlight">EXPLOIT</span></h1>
+                <p class="subtitle">ระบบวิเคราะห์เจาะช่องโหว่นาฬิกาเซิร์ฟเวอร์ (PRNG Latency Exploit) ค้นหาจังหวะเวลาที่ค่า Seed อ่อนแอที่สุดเพื่อบังคับออกรางวัล (Timing Attack Vulnerability)</p>
+            </div>
 
-        <div class="scan-container">
-            <div id="scanLine" class="scan-line"></div>
-            <button id="predictBtn" class="main-btn">สแกนหาจุดแตก & แผนการเล่น</button>
-        </div>
+            <div class="control-panel">
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <div class="status-display" id="statusDisplay">
+                    &gt; SYSTEM IDLE. WAITING FOR COMMAND...
+                </div>
+                
+                <button class="btn-scan" id="btnScan">
+                    <i class="fa-solid fa-satellite-dish"></i> INITIATE DEEP SCAN
+                </button>
+            </div>
 
-        <div id="loading" class="loading">
-            <div class="status-text" id="statusText">SYSTEM INITIALIZING...</div>
-        </div>
+            <div class="results-container" id="resultsContainer">
+                <!-- Game Cards Go Here -->
+            </div>
+        </main>
 
-        <div id="results" class="results-grid"></div>
-
-        <!-- Strategy Modal -->
-        <div id="strategyModal" class="modal-overlay">
-            <div class="modal-content">
-                <span id="closeModal" class="close-btn">&times;</span>
-                <div id="strategyHeader"></div>
-                <div id="strategyPhases"></div>
-                <div class="strategy-footer">
-                    *คำเตือน: โปรดเล่นตามแผนอย่างเคร่งครัดเพื่อผลลัพธ์สูงสุดในการดึง Jackpot
+        <!-- Dynamic Strategy Modal -->
+        <div class="modal-backdrop" id="strategyModal">
+            <div class="modal-box glass-panel">
+                <button class="btn-close" id="btnCloseModal"><i class="fa-solid fa-xmark"></i></button>
+                <div class="modal-header" id="modalHeader"></div>
+                <div class="modal-body" id="modalBody"></div>
+                <div class="modal-footer">
+                    <p class="warning-text"><i class="fa-solid fa-triangle-exclamation"></i> ให้เล่นตามกลยุทธ์อย่างเคร่งครัด ห้ามฝืนสปินเกินแผนเด็ดขาด</p>
                 </div>
             </div>
         </div>
 
-        <div class="references"
-            style="margin-top: 60px; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 10px; font-size: 11px; color: #888; text-align: left; line-height: 1.6; border: 1px solid rgba(255,255,255,0.05);">
-            <strong style="color: #00d1ff; display: block; margin-bottom: 5px;">🧮 การให้เครดิตข้อมูล (Pure Math
-                Engine):</strong>
-            • ระบบไม่ได้กวาดคำโม้จากเว็บรีวิวอีกต่อไป <u>โมเดลทั้งหมดทำงานผ่านสมการคณิตศาสตร์ 100%</u><br>
-            • ใช้หลัก Cryptographic Time-Hash เพื่อซิงค์กับ Pseudo-Random ของเครื่องเซิร์ฟเวอร์หลัก<br>
-            • ประเมินผลผ่านค่าความร้อนของ Volatility และกฎของค่า EV+ (Expected Value)
-        </div>
     </div>
-    <script src="sniper-v8.js?v=10.0"></script>
+    
+    <script src="engine.js"></script>
 </body>
-
 </html>
