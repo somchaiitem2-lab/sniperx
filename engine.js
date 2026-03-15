@@ -32,6 +32,30 @@ const progressBar = document.getElementById('progressBar');
 const statusDisplay = document.getElementById('statusDisplay');
 const resultsContainer = document.getElementById('resultsContainer');
 const strategyModal = document.getElementById('strategyModal');
+const clockTimeDisplay = document.getElementById('clockTime');
+
+// World Clock Ticker
+function updateClock() {
+    const now = new Date();
+    const hs = now.getHours().toString().padStart(2, '0');
+    const ms = now.getMinutes().toString().padStart(2, '0');
+    const ss = now.getSeconds().toString().padStart(2, '0');
+    
+    if(clockTimeDisplay) {
+        clockTimeDisplay.innerText = `${hs}:${ms}:${ss}`;
+        
+        // Highlight seconds if they hit the vulnerable timing (0 or 5)
+        if(ss.endsWith('0') || ss.endsWith('5')) {
+            clockTimeDisplay.style.color = '#00ff00';
+            clockTimeDisplay.style.textShadow = '0 0 15px #00ff00';
+        } else {
+            clockTimeDisplay.style.color = 'var(--primary)';
+            clockTimeDisplay.style.textShadow = '0 0 10px rgba(0, 240, 255, 0.8)';
+        }
+    }
+}
+setInterval(updateClock, 100);
+updateClock();
 
 const STEPS = [
     "INITIALIZING NX-CORE ALGORITHM...",
@@ -84,30 +108,39 @@ function generateResults() {
     let scoredGames = pgGamesList.map(game => {
         const h = stringHash(game);
         
-        // --- PRNG STATE RECOVERY & TIMING EXPLOIT MODEL ---
-        // Instead of plain EV, simulate reverse-engineering the PRNG seed window.
-        // PRNGs in older systems can be predicted if the internal state and timing are known.
-        const prngSeed = (h * timeFrame) % 2147483647; // Simulated Mersenne Twister state
+        // --- PRNG STATE RECOVERY V2: PINPOINT PREDICTION ---
+        const prngSeed = (h * timeFrame) % 2147483647;
         
-        // Simulating the "Russian Hacker" method: calculating the latency between pressing spin and the PRNG clock
-        const latencyVulnerability = Math.sin(prngSeed) * Math.cos(prngSeed / 1000); 
+        // Calculate distinct wave cycles representing server state (Cold, Warming, Hot, Reversing)
+        const cycle1 = Math.sin(prngSeed / 500); 
+        const cycle2 = Math.cos(prngSeed / 200);
+        const cycle3 = Math.sin((prngSeed + h) / 100);
         
-        // Exploit Value (EV) is based on how predictable the current seed window is
-        let ev = 1.5 + (latencyVulnerability * 1.5) + (((h % 10) / 10)); // EV correlates to PRNG predictability
-        if(ev < 0) ev = Math.abs(ev);
-        if(ev > 3.0) ev = 3.0 - (ev * 0.1); // Cap EV to prevent absurd win rates
+        // Net Vuln Score (-3.0 to 3.0)
+        const vulnScore = cycle1 + cycle2 + cycle3;
         
-        const rtpBase = 95.0 + (ev * 0.5);
+        // Determine precision rating (Win Rate). We only want high win rates if the waves are perfectly aligned (Peak Sine positive)
+        let precisionRate = 50 + (vulnScore * 16.6); // Scale to 0-100 logically
+        if(precisionRate < 40) precisionRate = 40 + (h % 20); // Floor it realistically
+        if(precisionRate > 99) precisionRate = 98.0 + ((h % 10)/10);
         
+        // Calculate EV differently: EV represents the expected multiplier of the win, not just chance.
+        // Higher volatility = Higher potential EV but requires stricter timing
         const volInt = h % 3;
         const vol = volInt === 0 ? 'HIGH' : (volInt === 1 ? 'MED' : 'EXTREME');
         
-        const winRate = Math.min(99.9, Math.max(50, 75 + (ev * 6)));
+        let evMultiplier = 1.0;
+        if (vol === 'EXTREME') evMultiplier = 1.5;
+        if (vol === 'HIGH') evMultiplier = 1.2;
         
-        return { title: game, ev: ev, winRate: winRate, rtp: rtpBase + (ev*0.8), vol: vol };
+        let ev = 1.0 + (Math.max(0, vulnScore) * evMultiplier) + ((h % 15) / 100);
+        
+        const rtpBase = 93.0 + (Math.max(0, vulnScore) * 1.5);
+        
+        return { title: game, ev: ev, winRate: precisionRate, rtp: Math.min(99.9, rtpBase), vol: vol, score: precisionRate * ev };
     });
     
-    scoredGames.sort((a,b) => b.ev - a.ev);
+    scoredGames.sort((a,b) => b.score - a.score);
     const targets = scoredGames.slice(0, 12);
     
     targets.forEach((t, i) => {
